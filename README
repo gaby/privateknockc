@@ -1,0 +1,23 @@
+PrivateKnockC is a companion UDP Port Knocking Client with RSA Encryption for the "privateknockd" project.
+
+*--Usage--*
+
+$> cd privateknockc
+$> make
+$> privateknockc -s SRV_ADDR -p SRV_PORT -c CONFIG_FILE_PATH
+
+Ex. $> privateknockc -s 192.168.230.0 -p 9090 -c privateknockc.conf
+
+*--Configuration File Format--*
+
+PORT PORT PORT PORT
+
+Each port number must be separated by a space, a port sequence of 4 or more is recommended. 
+
+Ex. 100 200 300 400
+
+TODO List:
+1. Send Transaction time via argument.
+2. Implement RSA using OPENSSL Library.
+
+The current RSA implementation is based on the RSA Algorithms found in "Mastering Algorithms in C by Kyle Loudon", and as stated in the book its for educational use.
