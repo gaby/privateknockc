@@ -248,7 +248,7 @@ bool request_new_sequence (pkc_state *s)
         fatal_error (s, "Opening server socket.");
     }
     
-    /* Set socket recv timeout */
+    /* Set socket recv/send timeout */
     tv.tv_sec = 5;
     tv.tv_usec = 0;
     if (setsockopt (sockfd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(struct timeval)))
