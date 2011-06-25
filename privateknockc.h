@@ -136,7 +136,6 @@ along with PrivateKnockC. If not, see http://www.gnu.org/licenses/ \n\
     bool request_new_sequence (pkc_state * s);
     
     /* RSA Encryption Functions */
-    RSA_Data modexp (RSA_Data a, RSA_Data b, RSA_Data n);
     void rsa_encipher (RSA_Data plaintext, RSA_Data * ciphertext, RsaPubKey pubkey);
     
     /* Helpers Functions */
