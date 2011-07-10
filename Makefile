@@ -1,4 +1,5 @@
 #
+#   UDP Portknocking Client with RSA Encryption
 #   PrivateKnockc - Companion client for the PrivateKnockd Project
 #   Copyright (C) 2011 - Juan Gabriel Calderon-Perez
 #   Website: https://github.com/jgcalderonperez/privateknockc
@@ -23,15 +24,23 @@
 # Variables
 CC = gcc
 
+# GCC Flags
 CFLAGS = -m32 -g -O3 -W -Wall -std=gnu99 -pedantic -Wbad-function-cast \
 -Wcast-align -Wcast-qual -Wchar-subscripts -Winline -Wmissing-prototypes \
 -Wnested-externs -Wpointer-arith -Wredundant-decls -Wshadow \
 -Wstrict-prototypes -Wwrite-strings -Wformat-nonliteral -Wformat-security \
 -ftrapv -lrt -Wno-unused
 
+# Header Files
 HEADER = privateknockc.h
+
+# Source Files
 SOURCES = main.c privateknockc.c
+
+# Object Files
 OBJECTS = main.o privateknockc.o
+
+# Executable file
 EXECUTABLE = privateknockc
 
 %.o: %.c $(HEADER)
@@ -44,4 +53,3 @@ clean:
 	rm -f *.o
 	rm -f $(EXECUTABLE)
 	
-

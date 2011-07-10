@@ -1,4 +1,5 @@
 /*
+#   UDP Portknocking Client with RSA Encryption
 #   PrivateKnockc - Companion client for the PrivateKnockd Project
 #   Copyright (C) 2011 - Juan Gabriel Calderon-Perez
 #   Website: https://github.com/jgcalderonperez/privateknockc
@@ -113,6 +114,7 @@ along with PrivateKnockC. If not, see http://www.gnu.org/licenses/ \n\
         char srv_port [PORT_SIZE];                  /* Server listening port */
         char * config_file;                         /* Config file name */
         uint16_t sequence[SEQUENCE_SIZE];           /* Port Sequence */
+        uint32_t transaction_delay;                 /* Transaction Delay in seconds */
     } pkc_state;
     
     /* -----------------------------------------------------------------
@@ -121,11 +123,13 @@ along with PrivateKnockC. If not, see http://www.gnu.org/licenses/ \n\
 
     /* State Functions */
     void initialize_state (pkc_state * s);
+    void validate_state (pkc_state * s);
     void print_state (pkc_state * s);
     void free_state (pkc_state * s);
     void set_server_address (pkc_state * s, char * srv_address);
     void set_server_port (pkc_state * s, char * srv_port);
     void set_config_file (pkc_state * s, char * config_file);
+    void set_transaction_delay (pkc_state * s, char * delay);
 
     /* Config File */
     void load_config_file (pkc_state * s);

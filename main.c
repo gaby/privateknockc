@@ -1,4 +1,5 @@
 /*
+#   UDP Portknocking Client with RSA Encryption
 #   PrivateKnockc - Companion client for the PrivateKnockd Project
 #   Copyright (C) 2011 - Juan Gabriel Calderon-Perez
 #   Website: https://github.com/jgcalderonperez/privateknockc
@@ -58,6 +59,7 @@ void pkclient_help (void)
     fprintf (stderr, "\t -s  specify server address.\n");
     fprintf (stderr, "\t -p  specify server port number.\n");
     fprintf (stderr, "\t -c  specify configuration file.\n");
+    fprintf (stderr, "\t -d  specify transaction delay (seconds).\n");
     fprintf (stderr, "%s Ver. %s \nBy %s\n", PROGRAM_NAME, VERSION, AUTHOR);
     fprintf (stderr, "%s\n\n", DIVIDER);
 }
@@ -66,7 +68,7 @@ void process_command_line (int argc, char **argv, pkc_state * s)
 {
     register int32_t i = 0x0;
 
-    while ((i = getopt (argc, argv, "s:p:c:hv") ) != -1)
+    while ((i = getopt (argc, argv, "s:p:c:d:hv") ) != -1)
     {
         switch (i)
         {
@@ -85,6 +87,9 @@ void process_command_line (int argc, char **argv, pkc_state * s)
             case 'h':
                 pkclient_help ();
                 exit (EXIT_SUCCESS);
+            case 'd':
+                set_transaction_delay (s, optarg);
+                break;
 
             case 'v':
                 fprintf (stderr, "%s", COPYRIGHT);
@@ -113,6 +118,8 @@ int main (int argc, char **argv)
     initialize_state (ptr_s);
     
     process_command_line (argc, argv, ptr_s);
+
+    validate_state (ptr_s);
 
     load_config_file (ptr_s);
 

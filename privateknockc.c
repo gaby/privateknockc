@@ -1,4 +1,5 @@
 /*
+#   UDP Portknocking Client with RSA Encryption
 #   PrivateKnockc - Companion client for the PrivateKnockd Project
 #   Copyright (C) 2011 - Juan Gabriel Calderon-Perez
 #   Website: https://github.com/jgcalderonperez/privateknockc
@@ -42,6 +43,7 @@ void initialize_state (pkc_state * s)
     memset (s->srv_port, '\0', PORT_SIZE * sizeof(char));
     s->config_file = NULL;
     memset (s->sequence, 0x0, SEQUENCE_SIZE * sizeof (uint16_t));
+    s->transaction_delay = 5; /* Default if not define via argv */
 }
 
 void print_state (pkc_state * s)
@@ -86,9 +88,45 @@ void set_config_file (pkc_state * s, char * config_file)
 {
     register uint32_t argv_size = strlen(config_file);
 
-    s->config_file = (char*)malloc (argv_size * sizeof(char));
-    chop (config_file); /* Removes \n from string! */
-    strncpy (s->config_file, config_file, argv_size);
+    if((s->config_file = (char*)malloc (argv_size * sizeof(char))) != NULL)
+    {
+        chop (config_file); /* Removes \n from string! */
+        strncpy (s->config_file, config_file, argv_size);
+    }
+    else
+    {
+        fatal_error (s, "No configuration file specified");
+    }
+}
+
+void set_transaction_delay (pkc_state * s, char * delay)
+{
+    if (strtoul(delay, NULL, 10) < UINT32_MAX)
+    {
+        s->transaction_delay = strtoul(delay, NULL, 10);
+    }
+    else
+    {
+        fatal_error (s, "Invalid transaction delay value");
+    }
+}
+
+void validate_state (pkc_state * s)
+{
+    if (s->config_file == NULL)
+    {
+        fatal_error (s, "No configuration file specified");
+    }
+    else
+        if (s->srv_port[0] == '\0')
+        {
+            fatal_error (s, "No server port specified");
+        }
+        else
+            if (s->srv_address[0] == '\0')
+            {
+                fatal_error (s, "No server address file specified");
+            }
 }
 
 void load_config_file (pkc_state * s)
@@ -98,9 +136,7 @@ void load_config_file (pkc_state * s)
     
     if (s->config_file == NULL)
     {
-        fprintf (stderr, "No configuration file specified.\n");
-        closelog ();
-        exit (EXIT_FAILURE);
+        fatal_error (s, "No configuration file specified");
     }
     
     /* Open configuration file for reading */
@@ -134,9 +170,7 @@ void update_config_file (pkc_state *s)
     
     if (s->config_file == NULL)
     {
-        fprintf (stderr, "No configuration file specified.");
-        closelog ();
-        exit (EXIT_FAILURE);
+        fatal_error (s, "No configuration file specified");
     }
     
     /* Open configuration file for writing */
@@ -146,7 +180,6 @@ void update_config_file (pkc_state *s)
     }
     else
     {
-
 #ifdef DEBUG
         fprintf (stderr, "Updating configuration file.\n");
 #endif    
@@ -279,8 +312,6 @@ bool request_new_sequence (pkc_state *s)
         fatal_error (s, "Connecting to server.");
     }
     
-    printf ("im here.\n");
-
     memset (buffer, '\0', PORT_SIZE * SEQUENCE_SIZE + 1);
     
     if ((n = recv(sockfd, buffer, PORT_SIZE * SEQUENCE_SIZE + 1, MSG_DONTWAIT)) < 0)
