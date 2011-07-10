@@ -281,14 +281,17 @@ bool request_new_sequence (pkc_state *s)
         fatal_error (s, "Opening server socket.");
     }
     
-    /* Set socket recv/send timeout */
-    tv.tv_sec = 5;
+    /* Set socket recv/send timeout time */
+    tv.tv_sec = 10;
     tv.tv_usec = 0;
+    
+    /* Socket recv timeout */
     if (setsockopt (sockfd, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(struct timeval)))
     {
         fatal_error (s, "Setting socket options.");
     }
     
+    /* Socket send timeout */
     if (setsockopt (sockfd, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, sizeof(struct timeval)))
     {
         fatal_error (s, "Setting socket options.");
