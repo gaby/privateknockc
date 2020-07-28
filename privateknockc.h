@@ -87,7 +87,7 @@ along with PrivateKnockC. If not, see http://www.gnu.org/licenses/ \n\
 
 #define PROGRAM_NAME             "privateknockc"
 #define AUTHOR                   "Juan Gabriel Calderon-Perez"
-#define VERSION                  "1.0-beta"
+#define VERSION                  "1.0.0-alpha"
 #define DIVIDER "-------------------------------------------------------------"
 #define TRANSACTION_DELAY 3               /* Delay for requesting new sequence */
 #define LINE_LENGTH 80                    /* Default line length size */
